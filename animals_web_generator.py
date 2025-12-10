@@ -52,16 +52,19 @@ def get_animal_string(animals_data):
     """
     animal_string =""
     for animal in animals_data:
-        animal_string += '<li class="cards__item">\n'
         animal_name, animal_diet, animal_type, animal_location = get_animal_info(animal)
+
+        animal_string += '<li class="cards__item">\n'
         if animal_name:
-            animal_string += f'Name: {animal_name}<br/>\n'
+            animal_string += f'<div class ="card__title" > {animal_name} </div>\n'
+        animal_string += f'<p class="card__text">'
         if animal_diet:
-            animal_string += f'Diet: {animal_diet}<br/>\n'
+            animal_string += f'<strong>Diet:</strong> {animal_diet}<br/>\n'
         if animal_location:
-            animal_string += f'Location: {animal_location}<br/>\n'
+            animal_string += f'<strong>Location:</strong> {animal_location}<br/>\n'
         if animal_type:
-            animal_string += f'Type: {animal_type}<br/>\n'
+            animal_string += f'<strong>Type:</strong> {animal_type}<br/>\n'
+        animal_string += '</p>\n'
         animal_string +="</li>\n"
     return animal_string
 
