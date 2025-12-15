@@ -29,23 +29,6 @@ def get_animal_info(animal):
     return animal_name, animal_diet, animal_type, animal_location
 
 
-def print_animal_info(animals_data):
-    """
-    This function prints all data of an animal.
-    """
-    for animal in animals_data:
-        animal_name, animal_diet, animal_type, animal_location = get_animal_info(animal)
-        if animal_name:
-            print("Name: ", animal_name)
-        if animal_diet:
-            print("Diet: ", animal_diet)
-        if animal_location:
-            print("Location: ", animal_location)
-        if animal_type:
-            print("Type: ", animal_type)
-        print()
-        print()
-
 def get_animal_string(animals_data):
     """
     This function creates a string of all animals
@@ -92,7 +75,6 @@ def main():
     animal_string = get_animal_string(animals_data)
     new_template_string = template_string.replace("__REPLACE_ANIMALS_INFO__", animal_string)
     save_data("animals.html",new_template_string)
-    print(new_template_string)
 
 if __name__ == "__main__":
     main()
