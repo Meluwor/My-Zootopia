@@ -54,21 +54,22 @@ def serialize_animal(animal):
     #I expect a name for each animal else this needs to be changed a bit
     if animal_name:
         animal_string += f'<div class ="card__title" > {animal_name} </div>\n'
-    animal_string += f'<p class="card__text">'
+    animal_string += f'<div>'
+    animal_string += '<ul class="card__attributes">'
     if animal_diet:
-        animal_string += f'<strong>Diet:</strong> {animal_diet}<br/>\n'
+        animal_string += f'<li class="card__attribute"><strong>Diet:</strong> {animal_diet}</li>\n'
     if animal_location:
-        animal_string += f'<strong>Location:</strong> {animal_location}<br/>\n'
+        animal_string += f'<li class="card__attribute"><strong>Location:</strong> {animal_location}</li>\n'
     if animal_type:
-        animal_string += f'<strong>Type:</strong> {animal_type}<br/>\n'
+        animal_string += f'<li class="card__attribute"><strong>Type:</strong> {animal_type}</li>\n'
     if animal_color:
-        animal_string += f'<strong>Color:</strong> {animal_color}<br/>\n'
+        animal_string += f'<li class="card__attribute"><strong>Color:</strong> {animal_color}</li>\n'
     if animal_skin_type:
-        animal_string += f'<strong>Skin type:</strong> {animal_skin_type}<br/>\n'
+        animal_string += f'<li class="card__attribute"><strong>Skin type:</strong> {animal_skin_type}</li>\n'
     if animal_lifespan:
-        animal_string += f'<strong>Skin type:</strong> {animal_lifespan}<br/>\n'
-
-    animal_string += '</p>\n'
+        animal_string += f'<li class="card__attribute"><strong>Lifespan:</strong> {animal_lifespan}</li>\n'
+    animal_string += '</ul>'
+    animal_string += '</div>\n'
     animal_string += "</li>\n"
 
     return animal_string
