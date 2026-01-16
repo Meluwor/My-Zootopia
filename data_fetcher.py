@@ -15,18 +15,40 @@ def get_api_key_from_user():
     api_key = input("Please enter your API-Key. ")
     return api_key
 
-def is_valid_api_key(api_key):
+
+def is_valid_api_key_from_file(api_key):
   """
-  A simple check if the given key is valid.
+  A simple check if the stored api key is valid.
   """
-  #could ba any other available animal
+  message = "The stored key is not valid."
+  if check_api_key(api_key):
+    return True
+  print(message)
+  return False
+
+
+def is_valid_api_key_from_user(api_key):
+  """
+  A simple check if the given api key is valid.
+  """
+  message = "The given key is not valid. Loading data from json file."
+  if check_api_key(api_key):
+    return True
+  print(message)
+  return False
+
+
+def check_api_key(api_key):
+  """
+  A simple check if the given key is valid. This is the real check.
+  """
+  # could ba any other available animal
   animal_name = "fox"
 
   url = f"https://api.api-ninjas.com/v1/animals?X-Api-Key={api_key}&name={animal_name}"
   res = requests.get(url)
   if res.status_code == 200:
     return True
-  print("The given key is not valid. Loading data from json file.")
   return False
 
 

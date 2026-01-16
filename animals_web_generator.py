@@ -1,5 +1,6 @@
 import data_fetcher
-
+import os
+from dotenv import load_dotenv
 
 def get_animal_info(animal):
     """
@@ -115,12 +116,26 @@ def get_no_data_available(animal_name):
     return f'<h3 style="color: red; text-align: center;">No Data available for <span style="color: black;">{animal_name}</span>. Try again!<h3>'
 
 
+def prepare_api_key():
+    """
+    This function shall ensure to get an api key if possible.
+    First it looks for a stored one if there is none the user has the possibility to enter one.
+    """
+    is_valid_key = False
+    load_dotenv()
+    api_key = os.getenv('API_KEY')
+    if api_key:
+        is_valid_key = data_fetcher.is_valid_api_key_from_file(api_key)
+    if not is_valid_key:
+        api_key = data_fetcher.get_api_key_from_user()
+        is_valid_key = data_fetcher.is_valid_api_key_from_user(api_key)
+    return is_valid_key, api_key
+
+
 def main():
+    is_valid_key, api_key = prepare_api_key()
 
-    api_key = data_fetcher.get_api_key_from_user()
-    is_valid_key = data_fetcher.is_valid_api_key(api_key)
     while True:
-
         if is_valid_key:
             animal_name = get_animal_name_from_user()
             animals_data = data_fetcher.fetch_data(api_key, animal_name)
