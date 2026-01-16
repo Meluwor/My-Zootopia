@@ -113,7 +113,7 @@ def get_animal_name_from_user():
 
 def get_animals_from_api_by_name(api_key,animal_name):
     """
-    This function shall get animals by name via an API
+    This function shall get animals by name via an API.
     """
     url=f"https://api.api-ninjas.com/v1/animals?X-Api-Key={api_key}&name={animal_name}"
     res = requests.get(url)
@@ -121,12 +121,20 @@ def get_animals_from_api_by_name(api_key,animal_name):
 
 def search_for_another_animal():
     """
-    A simple check if the user wants to search again
+    A simple check if the user wants to search again.
     """
     user_input= input("Do you want to search for another animal? (y/n)")
     if user_input.lower() == "y":
         return True
     return False
+
+
+def get_no_data_available(animal_name):
+    """
+    Just a simple hint at the page to inform the user about no data.
+    """
+    return f'<h3 style="color: red; text-align: center;">No Data available for <span style="color: black;">{animal_name}</span>. Try again!<h3>'
+
 
 def main():
 
@@ -135,12 +143,17 @@ def main():
     while True:
         animal_name = get_animal_name_from_user()
         animals_data = get_animals_from_api_by_name(api_key,animal_name)
-        template_string = get_template_as_string("animals_template.html")
-        animal_string = get_animal_string(animals_data)
-        new_template_string = template_string.replace("__REPLACE_ANIMALS_INFO__", animal_string)
-        create_html_page("animals.html",new_template_string)
-        print("The page has been generated.")
-
+        if animals_data:
+            template_string = get_template_as_string("animals_template.html")
+            animal_string = get_animal_string(animals_data)
+            new_template_string = template_string.replace("__REPLACE_ANIMALS_INFO__", animal_string)
+            create_html_page("animals.html",new_template_string)
+            print("The page has been generated.")
+        else:
+            print("There are no relevant data to display.")
+            create_html_page("animals.html", get_no_data_available(animal_name))
+            print("An 'empty' page has been generated.")
+            pass
         if not search_for_another_animal():
             break
 
