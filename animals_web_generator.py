@@ -1,8 +1,11 @@
 import json
+import requests
 
 
 def load_data(file_path):
-  """ Loads a JSON file """
+  """
+  Loads a JSON file.
+  """
   with open(file_path, "r") as handle:
     return json.load(handle)
 
@@ -71,7 +74,7 @@ def serialize_animal(animal):
 
 def get_animal_string(animals_data):
     """
-    This function creates a string of all animals
+    This function creates a string of all animals.
     """
     animal_list = []
     for animal in animals_data:
@@ -82,27 +85,65 @@ def get_animal_string(animals_data):
 
 def get_template_as_string(path):
     """
-    This function returns the given template as string
+    This function returns the given template as string.
     """
     with open(path, "r") as a:
         data = a.read()
     return data
 
 
-def save_data(path,data):
+def create_html_page(path,data):
     """
-    This function creates a new "html" file
+    This function creates a new "html" file.
     """
     with open(path,"w")as a:
         a.write(data)
 
+def get_api_key_from_user():
+    """
+    This function just takes an api-key from the user.
+    """
+    return input("Please enter your API-Key. ")
+
+def get_animal_name_from_user():
+    """
+    A simple input to get a possible animal name.
+    """
+    return input("Enter the name of an animal. ")
+
+def get_animals_from_api_by_name(api_key,animal_name):
+    """
+    This function shall get animals by name via an API
+    """
+    url=f"https://api.api-ninjas.com/v1/animals?X-Api-Key={api_key}&name={animal_name}"
+    res = requests.get(url)
+    return res.json()
+
+def search_for_another_animal():
+    """
+    A simple check if the user wants to search again
+    """
+    user_input= input("Do you want to search for another animal? (y/n)")
+    if user_input.lower() == "y":
+        return True
+    return False
 
 def main():
-    animals_data = load_data('animals_data.json')
-    template_string = get_template_as_string("animals_template.html")
-    animal_string = get_animal_string(animals_data)
-    new_template_string = template_string.replace("__REPLACE_ANIMALS_INFO__", animal_string)
-    save_data("animals.html",new_template_string)
+
+    #animals_data = load_data('animals_data.json')
+    api_key = get_api_key_from_user()
+    while True:
+        animal_name = get_animal_name_from_user()
+        animals_data = get_animals_from_api_by_name(api_key,animal_name)
+        template_string = get_template_as_string("animals_template.html")
+        animal_string = get_animal_string(animals_data)
+        new_template_string = template_string.replace("__REPLACE_ANIMALS_INFO__", animal_string)
+        create_html_page("animals.html",new_template_string)
+        print("The page has been generated.")
+
+        if not search_for_another_animal():
+            break
+
 
 if __name__ == "__main__":
     main()
