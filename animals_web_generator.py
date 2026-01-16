@@ -14,25 +14,20 @@ def get_animal_info(animal):
     """
     new_animal = {"name": None, "diet": None, "type": None, "location": None, "color": None,
                   "skin_type": None, "lifespan": None}
-    if "name" in animal:
-        new_animal["name"] = animal["name"]
 
-    if "characteristics" in animal:
-        character = animal["characteristics"]
-        if "diet" in character:
-            new_animal["diet"] = character["diet"]
-        if "type" in character:
-            new_animal["type"] = character["type"]
-        if "color" in character:
-            new_animal["color"] = character["color"]
-        if "skin_type" in character:
-            new_animal["skin_type"] = character["skin_type"]
-        if "lifespan" in character:
-            new_animal["lifespan"] = character["lifespan"]
+    new_animal["name"] = animal.get("name")
 
-    if "locations" in animal:
-        if len(animal["locations"]) > 0:
-            new_animal["location"] = animal["locations"][0]
+    characteristics = animal.get("characteristics", {})
+    new_animal["diet"] = characteristics.get("diet")
+    new_animal["type"] = characteristics.get("type")
+    new_animal["color"] = characteristics.get("color")
+    new_animal["skin_type"] = characteristics.get("skin_type")
+    new_animal["lifespan"] = characteristics.get("lifespan")
+
+    location = animal.get("locations")
+    if len(location) > 0:
+        new_animal["location"] = animal.get("locations")[0]
+
     return new_animal
 
 
@@ -78,10 +73,11 @@ def get_animal_string(animals_data):
     """
     This function creates a string of all animals
     """
-    animal_string =""
+    animal_list = []
     for animal in animals_data:
-        animal_string += serialize_animal(animal)
-    return animal_string
+        animal_list.append(serialize_animal(animal))
+
+    return "".join(animal_list)
 
 
 def get_template_as_string(path):
