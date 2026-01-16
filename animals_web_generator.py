@@ -1,13 +1,4 @@
-import json
-import requests
-
-
-def load_data(file_path):
-  """
-  Loads a JSON file.
-  """
-  with open(file_path, "r") as handle:
-    return json.load(handle)
+import data_fetcher
 
 
 def get_animal_info(animal):
@@ -99,11 +90,6 @@ def create_html_page(path,data):
     with open(path,"w")as a:
         a.write(data)
 
-def get_api_key_from_user():
-    """
-    This function just takes an api-key from the user.
-    """
-    return input("Please enter your API-Key. ")
 
 def get_animal_name_from_user():
     """
@@ -111,13 +97,6 @@ def get_animal_name_from_user():
     """
     return input("Enter the name of an animal. ")
 
-def get_animals_from_api_by_name(api_key,animal_name):
-    """
-    This function shall get animals by name via an API.
-    """
-    url=f"https://api.api-ninjas.com/v1/animals?X-Api-Key={api_key}&name={animal_name}"
-    res = requests.get(url)
-    return res.json()
 
 def search_for_another_animal():
     """
@@ -138,11 +117,16 @@ def get_no_data_available(animal_name):
 
 def main():
 
-    #animals_data = load_data('animals_data.json')
-    api_key = get_api_key_from_user()
+    api_key = data_fetcher.get_api_key_from_user()
+    is_valid_key = data_fetcher.is_valid_api_key(api_key)
     while True:
-        animal_name = get_animal_name_from_user()
-        animals_data = get_animals_from_api_by_name(api_key,animal_name)
+
+        if is_valid_key:
+            animal_name = get_animal_name_from_user()
+            animals_data = data_fetcher.fetch_data(api_key, animal_name)
+        else:
+            animals_data = data_fetcher.load_data('animals_data.json')
+
         if animals_data:
             template_string = get_template_as_string("animals_template.html")
             animal_string = get_animal_string(animals_data)
@@ -153,10 +137,10 @@ def main():
             print("There are no relevant data to display.")
             create_html_page("animals.html", get_no_data_available(animal_name))
             print("An 'empty' page has been generated.")
-            pass
+        if not is_valid_key:
+            break
         if not search_for_another_animal():
             break
-
 
 if __name__ == "__main__":
     main()
